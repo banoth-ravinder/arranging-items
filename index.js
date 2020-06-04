@@ -1,141 +1,181 @@
-function insertionSort(arr) {
-  var i, j;
-  for (i = 0; i < arr.length; i++) {
-    let toCmp = arr[i];
-    for (j = i; j > 0 && toCmp < arr[j - 1]; j--) arr[j] = arr[j - 1];
-    arr[j] = toCmp;
-  }
-  return arr;
-}
+const arrange = {
+  /**
+   *
+   * @param {Array} [int]
+   */
+  insertionSort(arr) {
+    var i, j;
+    for (i = 0; i < arr.length; i++) {
+      let toCmp = arr[i];
+      for (j = i; j > 0 && toCmp < arr[j - 1]; j--) arr[j] = arr[j - 1];
+      arr[j] = toCmp;
+    }
+    return arr;
+  },
 
-function bubbleSort(arr) {
-  var len = arr.length;
-  for (var i = len - 1; i >= 0; i--) {
-    for (var j = 1; j <= i; j++) {
-      if (arr[j - 1] > arr[j]) {
-        var temp = arr[j - 1];
-        arr[j - 1] = arr[j];
-        arr[j] = temp;
+  /**
+   * 
+   * @param {Array} [int] 
+   */
+  bubbleSort(arr) {
+    var len = arr.length;
+    for (var i = len - 1; i >= 0; i--) {
+      for (var j = 1; j <= i; j++) {
+        if (arr[j - 1] > arr[j]) {
+          var temp = arr[j - 1];
+          arr[j - 1] = arr[j];
+          arr[j] = temp;
+        }
       }
     }
-  }
-  return arr;
-}
+    return arr;
+  },
 
-function selectionSort(arr) {
-  var minIdx,
-    temp,
-    len = arr.length;
-  for (var i = 0; i < len; i++) {
-    minIdx = i;
-    for (var j = i + 1; j < len; j++) {
-      if (arr[j] < arr[minIdx]) {
-        minIdx = j;
+  /**
+   * 
+   * @param {Array} [int] 
+   */
+  selectionSort(arr) {
+    var minIdx,
+      temp,
+      len = arr.length;
+    for (var i = 0; i < len; i++) {
+      minIdx = i;
+      for (var j = i + 1; j < len; j++) {
+        if (arr[j] < arr[minIdx]) {
+          minIdx = j;
+        }
       }
+      temp = arr[i];
+      arr[i] = arr[minIdx];
+      arr[minIdx] = temp;
     }
-    temp = arr[i];
-    arr[i] = arr[minIdx];
-    arr[minIdx] = temp;
-  }
-  return arr;
-}
+    return arr;
+  },
 
-function mergeSort(arr) {
-  if (arr.length < 2) return arr;
+  /**
+   * 
+   * @param {Array} [int] 
+   */
+  mergeSort(arr) {
+    if (arr.length < 2) return arr;
 
-  let middle = parseInt(arr.length / 2),
-    left = arr.slice(0, middle),
-    right = arr.slice(middle);
+    let middle = parseInt(arr.length / 2),
+      left = arr.slice(0, middle),
+      right = arr.slice(middle);
 
-  return merge(mergeSort(left), mergeSort(right));
-}
+    return subFunctions.merge(arrange.mergeSort(left), arrange.mergeSort(right));
+  },
 
-function merge(left, right) {
-  let result = [];
+  /**
+   * 
+   * @param {Array} [int] 
+   */
+  quickSort(arr) {
+    if (arr.length <= 1) return arr;
 
-  while (left.length && right.length) {
-    left[0] <= right[0]
-      ? result.push(left.shift())
-      : result.push(right.shift());
-  }
+    let pivot = Math.floor((arr.length - 1) / 2);
+    let val = arr[pivot],
+      less = [],
+      more = [];
 
-  while (left.length) result.push(left.shift());
-  while (right.length) result.push(right.shift());
+    arr.splice(pivot, 1);
+    arr.forEach(function(e, i, a) {
+      e < val ? less.push(e) : more.push(e);
+    });
 
-  return result;
-}
+    return arrange.quickSort(less).concat([val], arrange.quickSort(more));
+  },
 
-function quickSort(arr) {
-  if (arr.length <= 1) return arr;
+  /**
+   * 
+   * @param {Array} [int] 
+   */
+  heapSort(arr) {
+    var len = arr.length,
+      end = len - 1;
 
-  let pivot = Math.floor((arr.length - 1) / 2);
-  let val = arr[pivot],
-    less = [],
-    more = [];
+    subFunctions.heapify(arr, len);
 
-  arr.splice(pivot, 1);
-  arr.forEach(function(e, i, a) {
-    e < val ? less.push(e) : more.push(e);
-  });
-
-  return quickSort(less).concat([val], quickSort(more));
-}
-
-function heapSort(arr) {
-  var len = arr.length,
-    end = len - 1;
-
-  heapify(arr, len);
-
-  while (end > 0) {
-    swap(arr, end--, 0);
-    siftDown(arr, 0, end);
-  }
-  return arr;
-}
-
-function heapify(arr, len) {
-  // break the array into root + two sides, to create tree (heap)
-  var mid = Math.floor((len - 2) / 2);
-  while (mid >= 0) {
-    siftDown(arr, mid--, len - 1);
-  }
-}
-
-function siftDown(arr, start, end) {
-  var root = start,
-    child = root * 2 + 1,
-    toSwap = root;
-  while (child <= end) {
-    if (arr[toSwap] < arr[child]) {
-      swap(arr, toSwap, child);
+    while (end > 0) {
+      subFunctions.swap(arr, end--, 0);
+      subFunctions.siftDown(arr, 0, end);
     }
-    if (child + 1 <= end && arr[toSwap] < arr[child + 1]) {
-      swap(arr, toSwap, child + 1);
+    return arr;
+  },
+}
+
+/**
+ * Sub functions
+ */
+
+const subFunctions = {
+  // isAllInt(arr){
+  //   for(i=0; i< arr.length ; i++){
+  //     if(arr[i] )
+  //   }
+  // },
+
+  merge(left, right) {
+    let result = [];
+
+    while (left.length && right.length) {
+      left[0] <= right[0]
+        ? result.push(left.shift())
+        : result.push(right.shift());
     }
-    if (toSwap != root) {
-      swap(arr, root, toSwap);
-      root = toSwap;
-    } else {
-      return;
+
+    while (left.length) result.push(left.shift());
+    while (right.length) result.push(right.shift());
+
+    return result;
+  },
+
+  heapify(arr, len) {
+    // break the array into root + two sides, to create tree (heap)
+    var mid = Math.floor((len - 2) / 2);
+    while (mid >= 0) {
+      subFunctions.siftDown(arr, mid--, len - 1);
     }
-    toSwap = root;
-    child = root * 2 + 1;
+  },
+
+  siftDown(arr, start, end) {
+    var root = start,
+      child = root * 2 + 1,
+      toSwap = root;
+    while (child <= end) {
+      if (arr[toSwap] < arr[child]) {
+        subFunctions.swap(arr, toSwap, child);
+      }
+      if (child + 1 <= end && arr[toSwap] < arr[child + 1]) {
+        subFunctions.swap(arr, toSwap, child + 1);
+      }
+      if (toSwap != root) {
+        subFunctions.swap(arr, root, toSwap);
+        root = toSwap;
+      } else {
+        return;
+      }
+      toSwap = root;
+      child = root * 2 + 1;
+    }
+  },
+
+  swap(arr, i, j) {
+    var temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
   }
+
 }
 
-function swap(arr, i, j) {
-  var temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-}
+var arr = [1, 4434, 34, "e",-10, -19, -425, 523524, 53, 5234, 4, 3, 4, 9];
+// console.log("insertionSort--", arrange.insertionSort(arr));
+console.log("insertionSort--", arrange.insertionSort(arr));
+console.log("bubbleSort--", arrange.bubbleSort(arr));
+console.log("selectionSort--", arrange.selectionSort(arr));
+console.log("mergeSort--", arrange.mergeSort(arr));
+console.log("quickSort--", arrange.quickSort(arr));
+console.log("heapSort--", arrange.heapSort(arr));
 
-var arr = [1, 4434, 34, -10, -19, -425, 523524, 53, 5234, 4, 3, 4, 9];
-console.log("insertionSort--", insertionSort(arr));
-console.log("bubbleSort--", bubbleSort(arr));
-console.log("selectionSort--", selectionSort(arr));
-console.log("mergeSort--", mergeSort(arr));
-console.log("quickSort--", quickSort(arr));
-console.log("heapSort--", heapSort(arr));
-
-module.exports.insertionSort = insertionSort;
+module.exports.arrange = arrange;
