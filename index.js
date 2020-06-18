@@ -103,6 +103,13 @@ const arrange = {
     }
     return arr;
   },
+
+  /**
+   * @param {Array} [int]
+   */
+  bucketSort(arr){
+    
+  }
 }
 
 /**
@@ -110,11 +117,13 @@ const arrange = {
  */
 
 const subFunctions = {
-  // isAllInt(arr){
-  //   for(i=0; i< arr.length ; i++){
-  //     if(arr[i] )
-  //   }
-  // },
+  isAllInt(arr){
+    for(i=0; i< arr.length ; i++){
+      if( typeof arr[i] != "number" ){
+
+      }
+    }
+  },
 
   merge(left, right) {
     let result = [];
@@ -169,7 +178,7 @@ const subFunctions = {
 
 }
 
-var arr = [1, 4434, 34, "e",-10, -19, -425, 523524, 53, 5234, 4, 3, 4, 9];
+var arr = [1, 4434, 34,-10, -19, -425, 523524, 53, 5234, 4, 3, 4, 9];
 // console.log("insertionSort--", arrange.insertionSort(arr));
 console.log("insertionSort--", arrange.insertionSort(arr));
 console.log("bubbleSort--", arrange.bubbleSort(arr));
